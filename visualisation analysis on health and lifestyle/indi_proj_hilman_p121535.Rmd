@@ -1,0 +1,270 @@
+---
+title: "Storyboard"
+output: 
+  flexdashboard::flex_dashboard:
+    storyboard: true
+    
+---
+```{r include=FALSE}
+knitr::opts_chunk$set(echo=FALSE)
+library(ggplot2)
+library(shiny)
+library(plotly)
+dat<- read.csv("C:/Users/User/Desktop/STQD_ data visual/individual project/Sleep_health_and_lifestyle_dataset.csv", sep=",", header=TRUE)
+```
+
+Page {.storyboard}
+=====================================
+
+### Introduction
+In the modern society, occupation plays an important role in the continuity of economic expansion, societal development, and environmental management. 
+
+However, as important as the growth of modern society, sleep quality is often neglected and this might effect a person's lifestyle and health in the long run. 
+
+Therefore, this project aims to study the sleep health and lifestyle of each occupation.
+
+
+
+
+### 1:Occupation distribution
+
+```{r}
+ggplot(dat, aes(x="", fill=factor(Occupation)))+
+  geom_bar(width=1)+coord_polar(theta="y")
+
+
+```
+
+***
+
+This chart displays the 
+
+distribution of occupation in the dataset.
+
+It can be observed that the majority
+
+of the dataset consist of nurses, and
+
+doctors. 
+
+
+
+
+### 2:duration of sleep vs sleep quality
+
+
+```{r, fig.height=4, fig.width=4}
+ggplotly(ggplot(dat, aes(x=Sleep.Duration, y=Quality.of.Sleep, group=Occupation, fill=Occupation))+
+  geom_point(shape=21, aes(size=Quality.of.Sleep))+
+  labs(colours="Occupation")+
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)))
+
+```
+
+***
+
+we can see that the longer the sleep duration, the better the 
+
+sleep quality. We can further see that the occupation with 
+
+sleep quality value > 8 are teacher, engineer, lawyer & manager
+
+
+### 3:sleep quality vs activity level
+
+
+```{r}
+
+ggplotly(ggplot(dat, aes(x = Quality.of.Sleep, y =Physical.Activity.Level,colour=Occupation, group = Occupation)) +
+  geom_point() +
+  labs(x ="sleep quality", y = "activity level", colours="Occupation") +
+  theme_minimal())
+```
+
+***
+
+from the plot, overall we see that sleep quality improves 
+
+activity level. this is because as sleep quality increase, 
+
+the activity level increase as well
+
+
+### 4:stress level for each occupation
+
+
+```{r}
+ggplot(dat, aes(x = Occupation, y = Stress.Level, fill = Occupation)) +
+  geom_bar(stat = "identity") +
+  labs(x = "Occupation", y = "Stress Level") +
+  theme_minimal()+
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+```
+
+***
+
+ next, we would like to observe the stress level for each 
+ occupation. 
+ 
+ This is to further understand the relationship 
+ of stress level for each occupation. 
+ 
+ As we can see, the occupation with highest stress level is doctor, 
+ followed by nurse. In contrast, the lowest stress level belongs to managers
+
+
+### 5: stress level and heart rate 
+
+
+
+```{r}
+ggplotly(ggplot(dat, aes(fill = Occupation, x = Stress.Level, y = Heart.Rate)) +
+  geom_point() +
+  labs(fill = "Occupation", x = "stress level", y = "Heart Rate") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)))
+
+```
+
+***
+
+ from here, we can see that as stress level increase, the heart 
+ rate increases.However there are some outliers for lower stress 
+ level where the heart rate is high. 
+ 
+ There might be lifestyle or workstyle that would lead to high heart rate, which include 
+ low physical activity level will also affect heart rate.
+ 
+ 
+### 6: daily steps vs heart rate
+
+
+```{r}
+ggplotly(ggplot(dat, aes(fill = Occupation, x = Daily.Steps, y= Heart.Rate)) +
+  geom_point() +
+  labs(y = "heart rate", x = "Daily Steps") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)))
+
+```
+
+***
+
+In conjunction to the previous plot, we can see that the 
+daily steps have negative relationship towards heart rate. 
+
+This is because we can observe that as daily step increase, 
+the heart rate decreases. 
+
+We can also see that doctor has the lowest heart rate as 
+they have highest daily steps.
+
+### 7: BMI category distribution
+
+
+```{r}
+ggplot(dat, aes(x = BMI.Category, fill = BMI.Category)) +
+  geom_bar() +
+  labs(x = "BMI Category", y = "Frequency", fill = "BMI Category") +
+  theme_minimal()
+
+```
+
+***
+
+next, we will evaluate the BMI relationship with other 
+variables for each occupation.
+
+this is because we wish to understand the relationship 
+of BMI affecting or affected by the occupation, stress 
+level, blood pressure and others. 
+
+But first, we will see the general distribution of BMI 
+category, and we observe that majority of the dataset 
+participant belongs to normal, and followed by overweight.
+
+### 8: BMI category vs blood pressure
+
+
+```{r}
+ggplotly(ggplot(dat, aes(fill = Occupation, y = Blood.Pressure, x= BMI.Category)) +
+           geom_point() +
+           labs(y = "blood pressure", x = "BMI category") +
+           theme_minimal() +
+           theme(axis.text.x = element_text(angle = 45, hjust = 1)))
+```
+
+***
+
+from the plot, we can see the distribution of each occupation 
+on the BMI and blood pressure.
+
+this is to see that occupation that belongs to obese and
+overweight will usually have high blood pressure.
+
+this can come hand in hand with the stress level from the
+previous plots.
+
+as we can see, on average, the doctor has highest blood pressure 
+and stress level (from previous plot). 
+
+This can further infer that doctors have unhealthy lifestyle 
+which results them to being obese generally.
+
+
+### 9:  BMI vs sleep duration
+
+
+```{r}
+ggplotly(ggplot(dat, aes(fill = Occupation, y = Sleep.Duration, x= BMI.Category)) +
+           geom_point() +
+           labs(y = " sleep duration", x = "BMI Category") +
+           theme_minimal() +
+           theme(axis.text.x = element_text(angle = 45, hjust = 1)))
+```
+
+***
+
+We can observe that for normal and normal weight, 
+the sleep duration is mostly around 7 hours and above.
+
+Whereas, for overweight, the sleep duration is mostly below 7 hour.
+
+Therefore, we can assume that sleep duration has a 
+positive relationship with BMI.
+
+Lesser sleep will negatively affect BMI, and more 
+sleep will result to better BMI.
+
+### 10: sleep disorder vs BMI 
+
+
+```{r}
+ggplot(dat, aes(x = Sleep.Disorder, fill = BMI.Category)) +
+  geom_bar() +
+  labs(x = "Sleep Disorder", y = "Count", fill = "BMI Category") +
+  theme_minimal()
+```
+
+***
+
+Lastly, we wish to understand relationship between
+sleep disorder affecting BMI category.
+
+We see that when there is no sleep disorder, 
+the BMI mostly will be normal and there is an equal 
+distribution when there is a presence of sleep disorder, 
+which leads to overweight.
+
+Therefore, we can conclude that sleeping quality, 
+including sleeping duration and absence of sleep disorder
+will have a positive impact on BMI.
+
+### Conclusion
+In conclusion, we can infer that the doctor occupation are most stressful occupation as there is a high reading on stress level and blood pressure but have good sleep quality.
+
+Then we move into a more in-depth study of how sleep and stress affects BMI, and we found that high blood pressure, poor sleep duration and presence of sleep disorder leads to poor BMI category.
+
+Thus, we can conclude that any occupation have a mixed distribution of BMI reading. But the doctors and nurses have better lifestyle as they have better sleep quality and better health heart rate.
+
